@@ -1,14 +1,14 @@
 Name:			opensonic
 Summary:		A game based on the "Sonic the Hedgehog" universe
 Version:		0.1.4
-Release:		%mkrel 01
+Release:		1
 License:		GPL
 Group:			Amusements/Games/Action/Arcade
 URL:			http://opensnc.sourceforge.net/home/index.php
-Source0:		opensnc-src-%{version}.tar.gz
-Source1:		alpng13.tar.gz
-BuildRoot:		%{_tmppath}/%{name}-%{version}-build
-BuildRequires:	allegro-devel  logg
+Source0:		https://prdownloads.sourceforge.net/opensnc/Open%20Sonic/%{version}/opensnc-src-%{version}.tar.gz
+Source1:		https://prdownloads.sourceforge.net/alpng/alpng/1.3/alpng13.tar.gz
+Source2:		https://opensnc.sourceforge.net/logg/logg-2.9.zip
+BuildRequires:	allegro-devel
 BuildRequires:	fdupes
 BuildRequires:	cmake
 BuildRequires:	dumb-devel
@@ -29,44 +29,44 @@ levels.
 
 Open Sonic is written from the ground up in C language and uses the
 Allegro game programming library for graphics, sounds, player input
-and timers. Currently this game works on Microsoft Windows and
-GNU/Linux.
-
-
+and timers.
 
 %prep
-%setup -q -n opensnc-src-%{version}
-
-
-
-%__install -dm 755 alpng
+%autosetup -p1 -n opensnc-src-%{version}
+install -dm 755 alpng
 pushd alpng
-	%__tar xfz %{SOURCE1}
+tar xf %{S:1}
 popd
+tar xf %{S:2}
 
 
 %build
-pushd alpng
+cd alpng
 ./configure
-make 
+%make_build
+cd ..
 
-popd
-export OPENSNC_ALLEGRO_LIBS=`allegro-config --libs`
-export OPENSNC_ALLEGRO_VERSION=`allegro-config --version`
+cd logg-2.9
+make -f Makefile.unix FLAGS="%{optflags} -fPIC -fno-lto" CC=%{__cc}
+cd ..
 
-./configure
-
-%make 
+export _ALLEGRO_LIBS=`allegro-config --libs`
+export _ALLEGRO_VERSION=`allegro-config --version`
+export CFLAGS="%{optflags} -I$(pwd)/logg-2.9 -L$(pwd)/logg-2.9"
+%cmake \
+	-DLLOGG=`pwd`/liblogg.a \
+	-G Ninja
+%ninja_build 
 
 
 %install
-%makeinstall DESTDIR=%{buildroot}
+%ninja_install -C build
 
 %__install -dm 755 %{buildroot}%{_bindir}
 %__cat > %{buildroot}%{_bindir}/%{name}.sh << EOF
 #!/bin/bash
 cd %{_datadir}/%{name}
-pasuspender ./%{name}
+exec ./%{name}
 EOF
 
 # menu and icon
@@ -85,12 +85,12 @@ Exec=%{name}.sh
 Icon=%{name}
 Encoding=UTF-8
 Categories=Game;ArcadeGame;
+Path=%{_datadir}/%{name}
 EOF
 
 
-chmod 777 %{buildroot}%{_bindir}/%{name}.sh
-chmod 777 %{buildroot}%{_datadir}/%{name}/%{name}
-%clean
+chmod 755 %{buildroot}%{_bindir}/%{name}.sh
+chmod 755 %{buildroot}%{_datadir}/%{name}/%{name}
 
 
 %files
@@ -98,29 +98,5 @@ chmod 777 %{buildroot}%{_datadir}/%{name}/%{name}
 %doc *.html license.txt
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/*.png
-
-%defattr(664,root,games,775)
-%dir %{_datadir}/%{name}/config
-%{_datadir}/%{name}/config/*
-%dir %{_datadir}/%{name}/images
-%{_datadir}/%{name}/images/*
-%dir %{_datadir}/%{name}/languages
-%{_datadir}/%{name}/languages/*
-%dir %{_datadir}/%{name}/levels
-%{_datadir}/%{name}/levels/*
-%dir %{_datadir}/%{name}/licenses
-%{_datadir}/%{name}/licenses/*
-%dir %{_datadir}/%{name}/musics
-%{_datadir}/%{name}/musics/*
-%dir %{_datadir}/%{name}/quests
-%{_datadir}/%{name}/quests/*
-%dir %{_datadir}/%{name}/samples
-%{_datadir}/%{name}/samples/*
-%dir %{_datadir}/%{name}/themes
-%{_datadir}/%{name}/*
-%dir %{_datadir}/%{name}/screenshots
-%defattr(777,root,root)
+%{_datadir}/%{name}
 %{_bindir}/%{name}.sh
-%{_datadir}/%{name}/%{name}
-
-

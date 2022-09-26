@@ -1,3 +1,4 @@
 sources:
-  "alpng13.tar.gz:"	7f6d39430d6ca0c01b01a9605851c9c32b979cb0
-  "opensnc-src-0.1.4.tar.gz:"	7c8bda81d22640e2eddeba74aa425783317e17d3
+  alpng13.tar.gz: 7f6d39430d6ca0c01b01a9605851c9c32b979cb0
+  logg-2.9.zip: 701110f20cc3ddfcd1c0ff12f199069380cd5d90
+  opensnc-src-0.1.4.tar.gz: 7c8bda81d22640e2eddeba74aa425783317e17d3
