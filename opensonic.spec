@@ -11,10 +11,10 @@ Source2:		https://opensnc.sourceforge.net/logg/logg-2.9.zip
 BuildRequires:	allegro-devel
 BuildRequires:	fdupes
 BuildRequires:	cmake
+BuildRequires:	ninja
 BuildRequires:	dumb-devel
-BuildRequires:	libogg-devel
-BuildRequires:	libvorbis-devel
-
+BuildRequires:	pkgconfig(ogg)
+BuildRequires:	pkgconfig(vorbis)
 
 %description
 Open Sonic is a free open-source game based on the "Sonic the Hedgehog"
