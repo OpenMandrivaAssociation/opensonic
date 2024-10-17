@@ -4,7 +4,7 @@ Version:		0.1.4
 Release:		1
 License:		GPL
 Group:			Amusements/Games/Action/Arcade
-URL:			http://opensnc.sourceforge.net/home/index.php
+URL:			https://opensnc.sourceforge.net/home/index.php
 Source0:		https://prdownloads.sourceforge.net/opensnc/Open%20Sonic/%{version}/opensnc-src-%{version}.tar.gz
 Source1:		https://prdownloads.sourceforge.net/alpng/alpng/1.3/alpng13.tar.gz
 Source2:		https://opensnc.sourceforge.net/logg/logg-2.9.zip
